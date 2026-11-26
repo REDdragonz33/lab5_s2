@@ -2,6 +2,7 @@
 #include <iostream>
 #include <limits>
 
+// чтение числа
 int readNumber(const char* message, int minimum, int maximum) {
     int value;
 
@@ -21,6 +22,7 @@ int readNumber(const char* message, int minimum, int maximum) {
     }
 }
 
+// вывод карты
 void showMap(int width, int height, unsigned int seed) {
     std::cout << "\nГенерация карты мира...\n";
     std::cout << "Параметры: ширина = " << width
@@ -39,6 +41,7 @@ void showMap(int width, int height, unsigned int seed) {
     delete generator;
 }
 
+// ручная генерация
 void runManualGeneration() {
     std::cout << "\n[РУЧНОЙ РЕЖИМ] Введите параметры карты:\n";
 
@@ -50,11 +53,13 @@ void runManualGeneration() {
     showMap(width, height, seed);
 }
 
+// демонстрация
 void runDemo() {
     std::cout << "\nГенерация карты с предустановленными параметрами...\n";
     showMap(40, 20, 42);
 }
 
+// главная функция
 int main() {
     std::cout << "=======================================================\n";
     std::cout << "  Лабораторная работа №5. Генерация карты (Шум Перлина)\n";

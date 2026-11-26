@@ -1,12 +1,15 @@
 #include "perlin.h"
 #include <cmath>
 
+// узел перестановки
 PerlinNoise::NumberNode::NumberNode(int v) : value(v), next(0) {}
 
+// конструктор
 PerlinNoise::PerlinNoise(unsigned int seed) : permutation(0) {
     shufflePermutation(seed);
 }
 
+// деструктор
 PerlinNoise::~PerlinNoise() {
     NumberNode* current = permutation;
     while (current) {
@@ -16,6 +19,7 @@ PerlinNoise::~PerlinNoise() {
     }
 }
 
+// перемешивание перестановки
 void PerlinNoise::shufflePermutation(unsigned int seed) {
     NumberNode* values = 0;
     NumberNode* tail = 0;
@@ -26,6 +30,7 @@ void PerlinNoise::shufflePermutation(unsigned int seed) {
         tail = node;
     }
 
+    // собственный генератор псевдослучайных чисел lcg
     unsigned int state = seed;
     for (int i = 255; i > 0; --i) {
         state = state * 1664525u + 1013904223u;
@@ -57,6 +62,7 @@ void PerlinNoise::shufflePermutation(unsigned int seed) {
     }
 }
 
+// получение значения по индексу
 int PerlinNoise::valueAt(int index) const {
     index %= 512;
     if (index < 0) index += 512;
@@ -65,12 +71,17 @@ int PerlinNoise::valueAt(int index) const {
     return current->value;
 }
 
+// сглаживание
 double PerlinNoise::fade(double value) {
     return value * value * value * (value * (value * 6.0 - 15.0) + 10.0);
 }
+
+// интерполяция
 double PerlinNoise::interpolate(double a, double b, double weight) {
     return a + weight * (b - a);
 }
+
+// градиент
 double PerlinNoise::gradient(int hash, double x, double y) {
     switch (hash & 7) {
         case 0: return x + y;
@@ -84,6 +95,7 @@ double PerlinNoise::gradient(int hash, double x, double y) {
     }
 }
 
+// вычисление шума
 double PerlinNoise::noise(double x, double y) const {
     int cellX = static_cast<int>(std::floor(x)) & 255;
     int cellY = static_cast<int>(std::floor(y)) & 255;
@@ -104,9 +116,13 @@ double PerlinNoise::noise(double x, double y) const {
     return interpolate(bottom, top, v) * 0.7;
 }
 
+// деструктор генератора
 MapGenerator::~MapGenerator() {}
+
+// конструктор генератора
 PerlinMapGenerator::PerlinMapGenerator(unsigned int seed) : noise(seed) {}
 
+// выбор ландшафта
 Terrain PerlinMapGenerator::chooseTerrain(double value) const {
     if (value < -0.10) return Terrain::Sea;
     if (value < -0.04) return Terrain::Beach;
@@ -116,6 +132,7 @@ Terrain PerlinMapGenerator::chooseTerrain(double value) const {
     return Terrain::Mountain;
 }
 
+// генерация карты
 WorldMap* PerlinMapGenerator::generate(int width, int height) const {
     WorldMap* result = new WorldMap(width, height);
     const double scale = 0.09;
