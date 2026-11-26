@@ -1,10 +1,16 @@
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic
-SOURCES = main.cpp world.cpp perlin.cpp
-TARGET = lr5_app
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2
+TARGET := lr5_app
 
-all:
-	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(TARGET)
+SRCS := main.cpp \
+        perlin.cpp \
+        world.cpp
+
+.PHONY: all clean
+all: $(TARGET)
+
+$(TARGET): $(SRCS)
+	$(CXX) $(CXXFLAGS) $(SRCS) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)

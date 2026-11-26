@@ -11,6 +11,7 @@ private:
     int y;
     double height;
     Terrain terrain;
+
 public:
     Tile(int px, int py, double h, Terrain t);
     int getX() const;
@@ -31,6 +32,7 @@ private:
     int height;
     Node* first;
     Node* last;
+
 public:
     WorldMap(int w, int h);
     WorldMap(const WorldMap&) = delete;
@@ -46,6 +48,7 @@ class MapRenderer {
 private:
     static char terrainSymbol(Terrain terrain);
     static const char* terrainName(Terrain terrain);
+
 public:
     void print(const WorldMap& map) const;
     void printLegend() const;
